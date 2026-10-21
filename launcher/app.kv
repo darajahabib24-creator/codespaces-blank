@@ -1,5 +1,6 @@
 #:import A kivy.animation.Animation
 #:import rgba kivy.utils.get_color_from_hex
+#:import platform kivy.utils.platform
 #:set ICON_PLAY "P"
 #:set ICON_REFRESH "R"
 #:set ICON_KIVY "K"
@@ -39,8 +40,9 @@
         width: self.height
     Label:
         text: "Kivy Launcher"
-        size_hint_x: None
-        width: self.texture_size[0]
+        size_hint_x: 1
+        text_size: self.size
+        halign: "left"
         font_size: dp(16)
         font_name: "data/Roboto-Medium.ttf"
 
@@ -48,6 +50,15 @@
         text: ICON_REFRESH
         on_press:
             app.refresh_entries()
+
+    Button:
+        text: "Apps folder"
+        size_hint_x: None
+        width: dp(88)
+        font_size: dp(11)
+        disabled: platform != "android"
+        on_release:
+            app.select_apps_folder()
 
     ToggleButton:
         text: 'Show logs' if self.state == 'normal' else 'Hide logs'

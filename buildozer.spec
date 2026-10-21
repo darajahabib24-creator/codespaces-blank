@@ -22,7 +22,7 @@ source.include_exts = py,png,jpg,kv,atlas,ttf
 #source.exclude_exts = spec
 
 # (list) List of directory to exclude (let empty to not exclude anything)
-source.exclude_dirs = tests, bin, art
+source.exclude_dirs = tests, bin, art, android/recipes
 
 # (list) List of exclusions using pattern matching
 #source.exclude_patterns = license,images/*/*.jpg
@@ -36,7 +36,10 @@ version = 0.1
 
 # (list) Application requirements
 # comma seperated e.g. requirements = sqlite3,kivy
-requirements = kivy, android
+requirements = python3,kivy==2.3.1,kivymd==2.0.0,ffpyplayer,pyjnius,android
+
+# (str) Additional Java source files to include in the Android project
+android.add_src = android/src
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
@@ -84,17 +87,20 @@ fullscreen = 0
 # olive, purple, silver, teal.
 #android.presplash_color = #FFFFFF
 
-# (int) Android API to use
-# android.api = 30
+# (int) Android API to target (Android 16; remains compatible with Android 14)
+android.api = 36
 
 # (int) Minimum API required
-#android.minapi = 9
+android.minapi = 21
+
+# (list) Android permissions required by the application
+android.permissions = INTERNET
 
 # (int) Android SDK version to use
 #android.sdk = 20
 
 # (str) Android NDK version to use
-# android.ndk = 25
+android.ndk = 28c
 
 # (bool) Use --private data storage (True) or --dir public storage (False)
 #android.private_storage = True
@@ -143,8 +149,12 @@ fullscreen = 0
 # bootstrap)
 #android.gradle_dependencies =
 
-# (str) python-for-android branch to use, defaults to stable
-p4a.branch = master
+# (str) python-for-android branch to use
+p4a.branch = develop
+p4a.local_recipes = android/recipes
+
+# (str) python-for-android revision compatible with Android API 36
+p4a.commit = 8ef9d1dbbf769d2c14681dbc3c116c85e2e93bae
 
 # (str) XML file to include as an intent filters in <activity> tag
 #android.manifest.intent_filters =
@@ -175,10 +185,11 @@ android.manifest.launch_mode = standard
 # (bool) Copy library instead of making a libpymodules.so
 #android.copy_libs = 1
 
-# (str) The Android arch to build for, choices: armeabi-v7a, arm64-v8a, x86
+# (str) Build both 32-bit and 64-bit ARM APK libraries
 android.archs = armeabi-v7a,arm64-v8a
 
 android.accept_sdk_license = True
+p4a.bootstrap = sdl2
 
 #
 # Python for android (p4a) specific
@@ -210,48 +221,6 @@ android.accept_sdk_license = True
 
 # (str) Name of the certificate to use for signing the release version
 #ios.codesign.release = %(ios.codesign.debug)s
-
-# (list) Permissions
-[app:android.permissions]
-READ_EXTERNAL_STORAGE
-WRITE_EXTERNAL_STORAGE
-ACCESS_LOCATION_EXTRA_COMMANDS
-ACCESS_NETWORK_STATE
-ACCESS_NOTIFICATION_POLICY
-ACCESS_WIFI_STATE
-BLUETOOTH
-BLUETOOTH_ADMIN
-BROADCAST_STICKY
-CHANGE_NETWORK_STATE
-CHANGE_WIFI_MULTICAST_STATE
-CHANGE_WIFI_STATE
-DISABLE_KEYGUARD
-EXPAND_STATUS_BAR
-FOREGROUND_SERVICE
-GET_PACKAGE_SIZE
-INSTALL_SHORTCUT
-INTERNET
-KILL_BACKGROUND_PROCESSES
-MANAGE_OWN_CALLS
-MODIFY_AUDIO_SETTINGS
-NFC
-READ_SYNC_SETTINGS
-READ_SYNC_STATS
-RECEIVE_BOOT_COMPLETED
-REORDER_TASKS
-REQUEST_COMPANION_RUN_IN_BACKGROUND
-REQUEST_COMPANION_USE_DATA_IN_BACKGROUND
-REQUEST_DELETE_PACKAGES
-REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
-SET_ALARM
-SET_WALLPAPER
-SET_WALLPAPER_HINTS
-TRANSMIT_IR
-USE_FINGERPRINT
-VIBRATE
-WAKE_LOCK
-WRITE_SYNC_SETTINGS
-
 
 [buildozer]
 

@@ -1,0 +1,31 @@
+--- a/ffpyplayer/player/core.pyx
++++ b/ffpyplayer/player/core.pyx
+@@ -89 +89 @@
+-cdef void sdl_mixer_callback(int chan, uint8_t *stream, int len, VideoState self) nogil:
++cdef void sdl_mixer_callback(int chan, uint8_t *stream, int len, VideoState self) noexcept nogil:
+@@ -418 +418 @@
+-    cdef int decode_interrupt_cb(VideoState self) nogil:
++    cdef int decode_interrupt_cb(VideoState self) noexcept nogil:
+@@ -1527 +1527 @@
+-    cdef int sdl_audio_callback(VideoState self, uint8_t *stream, int len) nogil except 1:
++    cdef int sdl_audio_callback(VideoState self, uint8_t *stream, int len) noexcept nogil:
+@@ -1619 +1619 @@
+-            if not Mix_RegisterEffect(self.audio_dev, <void (*)(int, void *, int, void *) nogil>sdl_mixer_callback, NULL, self.self_id):
++            if not Mix_RegisterEffect(self.audio_dev, <void (*)(int, void *, int, void *) noexcept nogil>sdl_mixer_callback, NULL, self.self_id):
+@@ -1657 +1657 @@
+-        wanted_spec.callback = <void (*)(void *, uint8_t *, int) nogil>self.sdl_audio_callback
++        wanted_spec.callback = <void (*)(void *, uint8_t *, int) noexcept>self.sdl_audio_callback
+@@ -1872 +1872 @@
+-                Mix_UnregisterEffect(self.audio_dev, <void (*)(int, void *, int, void *) nogil>sdl_mixer_callback)
++                Mix_UnregisterEffect(self.audio_dev, <void (*)(int, void *, int, void *) noexcept nogil>sdl_mixer_callback)
+@@ -1945 +1945 @@
+-        ic.interrupt_callback.callback = <int (*)(void *)>self.decode_interrupt_cb
++        ic.interrupt_callback.callback = <int (*)(void *) noexcept>self.decode_interrupt_cb
+--- a/ffpyplayer/player/core.pxd
++++ b/ffpyplayer/player/core.pxd
+@@ -163 +163 @@
+-    cdef int sdl_audio_callback(VideoState self, uint8_t *stream, int len) nogil except 1
++    cdef int sdl_audio_callback(VideoState self, uint8_t *stream, int len) noexcept nogil
+@@ -175 +175 @@
+-    cdef int decode_interrupt_cb(VideoState self) nogil
++    cdef int decode_interrupt_cb(VideoState self) noexcept nogil

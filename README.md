@@ -16,7 +16,31 @@ Follow the guide the same as before:
 
 https://kivy.org/docs/guide/packaging-android.html#packaging-your-application-for-the-kivy-launcher
 
-Then just start the launcher, you should see your application listed, then press play.
+On Android, choose the folder containing your applications the first time you
+start the launcher. The folder should contain one subdirectory per application,
+with an `android.txt` and `main.py` in each. The launcher remembers the
+user-granted folder access and copies its contents into private storage when you
+refresh the list. This uses Android's Storage Access Framework, not broad
+shared-storage access.
+
+The Android build targets API 36 (Android 16, required for new Google Play
+submissions as of August 31, 2026), supports API 21 and later, and runs on
+Android 14 and later. It packages both `armeabi-v7a` (32-bit ARM) and
+`arm64-v8a`. It uses Kivy's SDL2 bootstrap and OpenGL ES 2.0 rendering. Python
+3, Kivy, KivyMD, Pyjnius, and ffpyplayer are declared in `buildozer.spec`;
+the local python-for-android recipes build FFmpeg 6.1.2 for each selected ABI,
+matching the FFmpeg APIs used by ffpyplayer 4.5.1.
+
+Build a debug APK with:
+
+```sh
+buildozer android debug
+```
+
+The pinned python-for-android revision builds Python 3.14.2. Its local
+ffpyplayer recipe uses Cython 3.1.2 to generate code compatible with that
+Python version. Install `requirements.txt` for desktop development and the
+Buildozer host tool.
 
 ## `android.txt` specification
 

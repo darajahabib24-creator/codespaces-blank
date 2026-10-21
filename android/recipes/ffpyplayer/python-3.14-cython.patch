@@ -1,0 +1,12 @@
+--- a/ffpyplayer/tools.pyx
++++ b/ffpyplayer/tools.pyx
+@@ -105,7 +105,7 @@
+ cdef void call_callback(char *line, int level) nogil:
+     with gil:
+         gil_call_callback(line, level)
+ 
+-cdef void _log_callback_func(void* ptr, int level, const char* fmt, va_list vl) nogil:
++cdef void _log_callback_func(void* ptr, int level, const char* fmt, va_list vl) noexcept nogil:
+     cdef char line[2048]
+     if fmt == NULL or level > log_level:
+         return

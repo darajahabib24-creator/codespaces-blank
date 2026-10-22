@@ -3,8 +3,10 @@
 import os
 from datetime import datetime
 from kivy.animation import Animation
+from kivy.clock import Clock
 from kivy.lang import Builder
 from kivy.app import App
+from kivy.resources import resource_add_path
 from kivy.utils import platform
 from kivy.properties import ListProperty, BooleanProperty
 from glob import glob
@@ -12,6 +14,7 @@ from os.path import dirname, join, exists
 import traceback
 
 KIVYLAUNCHER_PATHS = os.environ.get("KIVYLAUNCHER_PATHS")
+APP_DIR = dirname(dirname(os.path.abspath(__file__)))
 
 
 class Launcher(App):
@@ -35,6 +38,7 @@ class Launcher(App):
 
     def build(self):
         self.log('start of log')
+        resource_add_path(APP_DIR)
 
         if platform == 'android':
             from jnius import autoclass
@@ -53,11 +57,14 @@ class Launcher(App):
             paths.extend(KIVYLAUNCHER_PATHS.split(","))
         self.paths = paths
 
-        self.root = Builder.load_file("launcher/app.kv")
+        self.root = Builder.load_file(join(APP_DIR, "launcher", "app.kv"))
         self.refresh_entries()
 
         if platform == 'android':
-            self.request_storage_access()
+            Clock.schedule_once(
+                lambda dt: self.request_storage_access(),
+                0
+            )
 
     def request_storage_access(self):
         from jnius import autoclass

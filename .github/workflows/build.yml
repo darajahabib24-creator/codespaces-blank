@@ -45,6 +45,15 @@ jobs:
             libncurses-dev libssl-dev libtinfo6 libtool pkg-config \
             unzip zlib1g-dev zip
 
+      # Ubuntu 24.04's libtool (2.5.x) removed the LT_SYS_SYMBOL_USCORE macro,
+      # which the pinned python-for-android's libffi recipe needs for
+      # autoreconf. Install libtool 2.4.6 so 'autogen.sh' works.
+      - name: Install libtool 2.4.6
+        run: |
+          curl -sL https://ftpmirror.gnu.org/libtool/libtool-2.4.6.tar.gz | tar xz -C /tmp
+          cd /tmp/libtool-2.4.6 && ./configure --prefix=/usr/local >/dev/null && make -j"$(nproc)" >/dev/null && sudo make install >/dev/null
+          libtool --version | head -1
+
       - name: Install Python Dependencies & Buildozer
         run: |
           python -m pip install --upgrade pip setuptools wheel

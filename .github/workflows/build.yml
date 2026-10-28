@@ -46,16 +46,13 @@ jobs:
             unzip zlib1g-dev zip
 
       # The pinned python-for-android's libffi recipe runs 'autogen.sh'
-      # (autoreconf). Autoconf 2.71/2.72 (Ubuntu 22.04/24.04) can't expand the
-      # old libtool macros the recipes vendor in, failing with
-      # "possibly undefined macro: LT_SYS_SYMBOL_USCORE".
-      # The classic working combo for these autotools-based recipes is the
-      # one Ubuntu 20.04 shipped: autoconf 2.69 + libtool 2.4.6.
-      - name: Install autoconf 2.69
+      # (autoreconf) and needs the LT_SYS_SYMBOL_USCORE macro. Without
+      # 'libltdl-dev' (which puts libtool's m4 on aclocal's search path)
+      # autoreconf fails with "possibly undefined macro: LT_SYS_SYMBOL_USCORE".
+      - name: Install libltdl-dev
         run: |
-          curl -sL https://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz | tar xz -C /tmp
-          cd /tmp/autoconf-2.69 && ./configure --prefix=/usr/local >/dev/null && make -j"$(nproc)" >/dev/null && sudo make install >/dev/null
-          autoconf --version | head -1
+          sudo apt-get update
+          sudo apt-get install -y libltdl-dev
 
       - name: Install Python Dependencies & Buildozer
         run: |

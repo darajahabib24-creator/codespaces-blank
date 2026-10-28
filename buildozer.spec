@@ -25,6 +25,12 @@ version = 0.2
 # - pyjnius (Java <-> Python bridge) is added automatically by the android bootstrap
 requirements = python3,kivy,kivymd,ffpyplayer
 
+# (str) Pin python-for-android to a commit where the ffmpeg recipe is still
+# 6.1.2: the current ffmpeg 8.0.1 recipe (p4a commit e564e44d, Jan 2026)
+# removed 'libavcodec/avfft.h', which breaks the ffpyplayer build
+# (known upstream issue kivy/python-for-android#3344).
+p4a.commit = 6494ac165606a24239eb34865280097c93e70aa9
+
 # (list) Supported orientations
 orientation = portrait
 

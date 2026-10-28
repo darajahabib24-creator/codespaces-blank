@@ -26,16 +26,17 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      # Caching Buildozer dependencies drastically reduces future build times.
-      # IMPORTANT: no restore-keys here — restoring an older cache mixes toolchain
-      # artifacts (e.g. stale Python/openssl/NDK versions) into new builds.
+      # Caching Buildozer's global dir (SDK/NDK) drastically reduces build times.
+      # IMPORTANT:
+      #   * do NOT cache the project-local .buildozer build tree — a build tree
+      #     saved from a failed run poisons later runs (e.g. hostpython3 with a
+      #     missing 'math' module, because its should_build() skips rebuilding)
+      #   * no restore-keys — restoring older artifacts mixes toolchain versions
       - name: Cache Buildozer Android SDK/NDK
         uses: actions/cache@v4
         with:
-          path: |
-            ~/.buildozer
-            .buildozer
-          key: ${{ runner.os }}-buildozer-v3-${{ hashFiles('buildozer.spec') }}
+          path: ~/.buildozer
+          key: ${{ runner.os }}-buildozer-v4-${{ hashFiles('buildozer.spec') }}
 
       - name: Install System Dependencies
         run: |

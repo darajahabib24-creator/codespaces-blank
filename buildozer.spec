@@ -15,11 +15,15 @@ source.dir = .
 source.include_exts = py,png,jpg,kv,atlas
 
 # (str) Application versioning
-version = 0.1
+version = 0.2
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy
+# - kivymd : Material Design widgets (KivyMD)
+# - ffpyplayer : pulls in the ffmpeg + SDL2 recipes automatically
+# - SDL2 / OpenGL ES 2 (and 3 on supported devices) come from the 'sdl2' bootstrap below
+# - pyjnius (Java <-> Python bridge) is added automatically by the android bootstrap
+requirements = python3,kivy,kivymd,ffpyplayer
 
 # (list) Supported orientations
 orientation = portrait
@@ -33,6 +37,12 @@ android.api = 34
 
 # (int) Minimum API your APK will support.
 android.minapi = 21
+
+# (list) App permissions
+# - INTERNET and READ/WRITE_EXTERNAL_STORAGE
+# - MANAGE_EXTERNAL_STORAGE = "All files access" storage manager (granted via
+#   system settings; main.py opens that screen through pyjnius)
+android.permissions = INTERNET,READ_EXTERNAL_STORAGE,WRITE_EXTERNAL_STORAGE,MANAGE_EXTERNAL_STORAGE
 
 # (list) The Android architectures to build for
 android.archs = armeabi-v7a

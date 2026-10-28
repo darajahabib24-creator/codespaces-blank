@@ -1,6 +1,16 @@
 # My Kivy App
 
-A simple Android app built with [Kivy](https://kivy.org) — a welcome screen with a button that says hello.
+A simple Android app built with [Kivy](https://kivy.org) and
+[KivyMD](https://kivymd.readthedocs.io) — a Material Design welcome screen with
+buttons to test internet access, file storage, and the ffpyplayer/ffmpeg
+libraries.
+
+## Permissions (in `buildozer.spec`)
+
+- `INTERNET` — connectivity test
+- `READ_EXTERNAL_STORAGE` / `WRITE_EXTERNAL_STORAGE`
+- `MANAGE_EXTERNAL_STORAGE` — **All files access** storage manager
+  (grant via the in-app "Manage Storage" button, opened from system settings)
 
 ## Build the APK
 

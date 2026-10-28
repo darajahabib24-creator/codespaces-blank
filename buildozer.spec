@@ -44,6 +44,11 @@ android.api = 34
 # (int) Minimum API your APK will support.
 android.minapi = 21
 
+# (str) Android NDK version. r25b (clang 14) is required for the pinned
+# ffmpeg 6.1.2: newer NDKs use clang CFLAGS that turn the Vulkan callback
+# warning in libavutil/hwcontext_vulkan.c into a hard error.
+android.ndk = 25b
+
 # (list) App permissions
 # - INTERNET and READ/WRITE_EXTERNAL_STORAGE
 # - MANAGE_EXTERNAL_STORAGE = "All files access" storage manager (granted via

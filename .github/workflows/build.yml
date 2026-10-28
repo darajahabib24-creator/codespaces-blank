@@ -45,14 +45,17 @@ jobs:
             libncurses-dev libssl-dev libtinfo6 libtool pkg-config \
             unzip zlib1g-dev zip
 
-      # Ubuntu 24.04's libtool (2.5.x) removed the LT_SYS_SYMBOL_USCORE macro,
-      # which the pinned python-for-android's libffi recipe needs for
-      # autoreconf. Install libtool 2.4.6 so 'autogen.sh' works.
-      - name: Install libtool 2.4.6
+      # The pinned python-for-android's libffi recipe runs 'autogen.sh'
+      # (autoreconf). Autoconf 2.71/2.72 (Ubuntu 22.04/24.04) can't expand the
+      # old libtool macros the recipes vendor in, failing with
+      # "possibly undefined macro: LT_SYS_SYMBOL_USCORE".
+      # The classic working combo for these autotools-based recipes is the
+      # one Ubuntu 20.04 shipped: autoconf 2.69 + libtool 2.4.6.
+      - name: Install autoconf 2.69
         run: |
-          curl -sL https://ftpmirror.gnu.org/libtool/libtool-2.4.6.tar.gz | tar xz -C /tmp
-          cd /tmp/libtool-2.4.6 && ./configure --prefix=/usr/local >/dev/null && make -j"$(nproc)" >/dev/null && sudo make install >/dev/null
-          libtool --version | head -1
+          curl -sL https://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz | tar xz -C /tmp
+          cd /tmp/autoconf-2.69 && ./configure --prefix=/usr/local >/dev/null && make -j"$(nproc)" >/dev/null && sudo make install >/dev/null
+          autoconf --version | head -1
 
       - name: Install Python Dependencies & Buildozer
         run: |

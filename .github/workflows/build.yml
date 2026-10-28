@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout Code
@@ -26,16 +26,16 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      # Caching Buildozer dependencies drastically reduces future build times
+      # Caching Buildozer dependencies drastically reduces future build times.
+      # IMPORTANT: no restore-keys here — restoring an older cache mixes toolchain
+      # artifacts (e.g. stale Python/openssl/NDK versions) into new builds.
       - name: Cache Buildozer Android SDK/NDK
         uses: actions/cache@v4
         with:
           path: |
             ~/.buildozer
             .buildozer
-          key: ${{ runner.os }}-buildozer-${{ hashFiles('buildozer.spec') }}
-          restore-keys: |
-            ${{ runner.os }}-buildozer-
+          key: ${{ runner.os }}-buildozer-v3-${{ hashFiles('buildozer.spec') }}
 
       - name: Install System Dependencies
         run: |
